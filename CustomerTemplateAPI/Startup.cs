@@ -39,22 +39,7 @@ namespace CustomerTemplateAPI
             services.Configure<JwtSettings>(jwtSettingsSection);
 
 
-            // Start of ApplicationDbContext DI decrare
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //{
-            //    options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-            //        Microsoft.EntityFrameworkCore.ServerVersion.FromString("8.0.23-mysql"));
-            //});
-
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //{
-            //    options
-            //    .UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection"),
-            //                        optionsBuilder => optionsBuilder.MigrationsAssembly("HRM.Core"));
-            //});
-
-            // End of ApplicationDbContext DI decrare
+            // ApplicationDbContext DI declare
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -79,8 +64,7 @@ namespace CustomerTemplateAPI
 
             services.AddSwaggerGen();
 
-            // Start of repository DI declare
-            // End of repository DI declare
+            // Repository DI declare
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
