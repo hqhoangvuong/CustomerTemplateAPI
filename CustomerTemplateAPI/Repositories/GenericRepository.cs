@@ -13,7 +13,6 @@ namespace CustomerTemplateAPI.Repositories
     {
         private ApplicationDbContext context;
         private DbSet<T> entities;
-        private DbSet<T> dbSet;
 
         public GenericRepository(ApplicationDbContext context)
         {
@@ -40,7 +39,7 @@ namespace CustomerTemplateAPI.Repositories
 
         public async Task<T> Update(T item)
         {
-            dbSet.Attach(item);
+            entities.Attach(item);
             context.Entry(item).State = EntityState.Modified;
             await context.SaveChangesAsync();
 
