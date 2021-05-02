@@ -8,7 +8,7 @@ namespace CustomerTemplateAPI.Repositories.Interfaces
     public interface IGenericRepository<T> where T: class
     {
         IEnumerable<T> GetAll();
-        Task<T> GetItemById(object id);
+        Task<T> GetItemById(object[] parameters);
         Task<T> Create(T item);
         Task<T> Update(T item);
         Task<int> Delete(object id);

@@ -25,9 +25,11 @@ namespace CustomerTemplateAPI.Repositories
             return context.Set<T>().AsNoTracking();
         }
 
-        public virtual async Task<T> GetItemById(object id)
+        public virtual async Task<T> GetItemById(object[] parameters)
         {
-            return await entities.FindAsync(id);
+            var result = await entities.FindAsync(parameters);
+            context.Entry(result).State = EntityState.Detached;
+            return result;
         }
 
         public virtual async Task<T> Create(T item)
