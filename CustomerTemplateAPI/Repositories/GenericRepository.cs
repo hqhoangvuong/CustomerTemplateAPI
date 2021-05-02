@@ -28,7 +28,8 @@ namespace CustomerTemplateAPI.Repositories
         public virtual async Task<T> GetItemById(object[] parameters)
         {
             var result = await entities.FindAsync(parameters);
-            context.Entry(result).State = EntityState.Detached;
+            if(result != null)
+                context.Entry(result).State = EntityState.Detached;
             return result;
         }
 
