@@ -66,6 +66,7 @@ namespace CustomerTemplateAPI.Controllers
                 user.Id = userGuid.ToString();
                 user.UserName = newUser.Username;
                 user.Email = newUser.Email;
+
                 var result = await _userManager.CreateAsync(user, newUser.Password);
             }
 
