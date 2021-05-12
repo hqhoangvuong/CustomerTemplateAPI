@@ -7,10 +7,7 @@ namespace CustomerTemplateAPI.Settings
 {
     public class JwtSetting
     {
-        public class JwtSettings
-        {
-            public string SecretKey { get; set; }
-            public double Expiration { get; set; }
-        }
+        public string SecretKey { get; set; }
+        public double Expiration { get; set; }
     }
 }

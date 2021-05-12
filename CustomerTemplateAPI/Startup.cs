@@ -2,6 +2,8 @@ using CustomerTemplateAPI.Data;
 using CustomerTemplateAPI.Models;
 using CustomerTemplateAPI.Repositories;
 using CustomerTemplateAPI.Repositories.Interfaces;
+using CustomerTemplateAPI.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,10 +15,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using static CustomerTemplateAPI.Settings.JwtSetting;
 
@@ -35,8 +40,8 @@ namespace CustomerTemplateAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var jwtSettingsSection = Configuration.GetSection(nameof(JwtSettings));
-            services.Configure<JwtSettings>(jwtSettingsSection);
+            var jwtSettingsSection = Configuration.GetSection(nameof(JwtSetting));
+            services.Configure<JwtSetting>(jwtSettingsSection);
 
 
             // ApplicationDbContext DI declare
@@ -59,6 +64,36 @@ namespace CustomerTemplateAPI
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            var jwtSettings = jwtSettingsSection.Get<JwtSetting>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    RequireExpirationTime = true,
+                    RequireSignedTokens = true,
+                    SaveSigninToken = false,
+                    ValidateActor = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddControllers();
 
