@@ -92,6 +92,17 @@ namespace CustomerTemplateAPI
                 };
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: FrontEnd, builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
@@ -116,6 +127,10 @@ namespace CustomerTemplateAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(FrontEnd);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
