@@ -106,7 +106,7 @@ namespace CustomerTemplateAPI
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<ISystemMasterConfigRepository, SystemMasterConfigRepository>();
             services.AddControllers();
 
             services.AddSwaggerGen(c => {
