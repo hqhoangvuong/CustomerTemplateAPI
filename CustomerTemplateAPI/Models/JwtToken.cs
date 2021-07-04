@@ -11,5 +11,6 @@ namespace CustomerTemplateAPI.Models
         public string TokenType { get; set; } = "JWT Bearer";
         public string AccessToken { get; set; }
         public DateTime ExpiredTime { get; set; }
+        public string DisplayName { get; set; }
     }
 }
